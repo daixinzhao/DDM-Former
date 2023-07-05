@@ -59,7 +59,6 @@ def mlp(x, hidden_units, dropout_rate):
 class Patches(layers.Layer):
     def __init__(self, patch_size):
         super(Patches, self).__init__()
-        self.patch_size = patch_size
 
     def call(self, images):
         batch_size = tf.shape(images)[0]
@@ -76,9 +75,6 @@ class Patches(layers.Layer):
     
     def get_config(self):
         config = super().get_config()
-        config.update({
-            "patch_size": self.patch_size,
-        })
         return config
 
 # DDA token
@@ -109,7 +105,7 @@ class DDAToken(layers.Layer):
 class PatchEncoder(layers.Layer):
     def __init__(self, num_patches, projection_dim):
         super(PatchEncoder, self).__init__()
-        self.num_patches = num_patches
+        self.num_patches = num_patches+1
         self.projection = layers.Dense(units=projection_dim, kernel_initializer=initializer)
         self.position_embedding = layers.Embedding(
             input_dim=num_patches, output_dim=projection_dim
